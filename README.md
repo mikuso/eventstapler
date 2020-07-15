@@ -5,31 +5,35 @@ Event Stapler is a utility to attach a collection of event listeners to an emitt
 ## Example
 
 ```js
-const eventStapler = new EventStapler();
+const eventStapler = require('.');
+const stream = require('fs').createReadStream('./README.md');
 
-const stapled = eventStapler.staple(stream)
+const stapled = eventStapler(stream)
     .on('data', onData)
-    .once('end', onEnd)
+    .once('end', onEnd, null, stream)
     .once('error', onError, null, stream)
-    .once('close')
-    .detachAfter('close')
-    .detachAfter('error');
+    .once('close', onClose)
+    .releaseAfter('close')
+    .releaseAfter('error');
 
 function onData(chunk) {
     // process data
+    console.log('CHUNK', chunk);
 }
 
 function onEnd(stream) {
     // handler is called with additional parameters provided at point of binding
+    console.log('END');
+    stapled.release(); // manually remove staple. all event handlers released.
+}
 
-
-    stapled.release(); // manually remove staple. all event handlers detached.
-    eventStapler.release(stream); // alternatively, pass the emitter to stapler.release()
+function onClose() {
+    console.log('CLOSE');
 }
 
 function onError(err) {
     // handle error.
     // don't worry about cleaning up old event listeners
+    console.log('ERROR', err);
 }
-
 ```
