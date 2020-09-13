@@ -20,7 +20,14 @@ class StapledEmitter {
         }
 
         const boundHandler = handler.bind(binding, ...args);
-        this._emitter[onlyOnce?'once':'on'](event, boundHandler);
+        let method = this._emitter.on ? 'on' : 'addEventListener';
+        if (onlyOnce) {
+            method = 'once';
+        }
+        if (!this._emitter[method]) {
+            throw Error(`EventEmitter doesn't support method .${method}()`);
+        }
+        this._emitter[method](event, boundHandler);
         this._eventHandlers.push({
             event,
             boundHandler
