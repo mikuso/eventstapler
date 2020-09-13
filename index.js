@@ -45,7 +45,7 @@ class StapledEmitter {
     }
 
     releaseAfter(event) {
-        return this.once(event, this.release, this);
+        return this.on(event, this.release, this);
     }
 
     release() {
@@ -54,7 +54,8 @@ class StapledEmitter {
         }
 
         for (const eventHandler of this._eventHandlers) {
-            this._emitter.removeListener(eventHandler.event, eventHandler.boundHandler);
+            let method = this._emitter.removeListener ? 'removeListener' : 'removeEventListener';
+            this._emitter[method](eventHandler.event, eventHandler.boundHandler);
         }
 
         return this;
