@@ -1,6 +1,6 @@
 {
   "name": "eventstapler",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Event Stapler is a utility to attach a collection of event listeners to an emitter in such a way that it is very easy to unbind them all later.  All events attached via a staple can be detached in a single call, or after a specific event is fired by the emitter.",
   "main": "index.js",
   "scripts": {},
