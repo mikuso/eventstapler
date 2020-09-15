@@ -11,8 +11,8 @@ class StapledEmitter {
             throw Error(`Staple is released`);
         }
 
-        if (typeof event !== 'string') {
-            throw Error(`Event name must be a string`);
+        if (['string', 'symbol'].indexOf(typeof event) === -1) {
+            throw Error(`Event name must be a string or a symbol`);
         }
 
         if (!(handler instanceof Function)) {
